@@ -14,7 +14,7 @@ def generate_launch_description():
     nav2_yaml = os.path.join(pkg_nav2, 'config', 'my_nav2_params.yaml')
     map_file = '/home/mmanueeelaadmin/turtlebot3_ws/src/pamabot/my_nav2_system/config/farmaciaMapa.yaml'
     rviz_config = os.path.join(pkg_nav2, 'config', 'pamabot_world.rviz')
-    world_launch = os.path.join(pkg_world, 'launch', 'turtlebot3_my_world.launch.py')
+    # world_launch = os.path.join(pkg_world, 'launch', 'turtlebot3_my_world.launch.py')
     urdf_file = os.path.join(pkg_world, 'urdf', 'turtlebot3_burger.urdf')
 
     return LaunchDescription([
