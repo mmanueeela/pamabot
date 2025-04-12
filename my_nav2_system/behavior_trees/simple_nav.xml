@@ -1,0 +1,17 @@
+<root main_tree_to_execute="NavigateToPose">
+  <BehaviorTree ID="NavigateToPose">
+    <Sequence name="root">
+      <RecoveryNode number_of_retries="1">
+        <PipelineSequence name="navigation_pipeline">
+          <RateController hz="10.0">
+            <DistanceController distance="0.5">
+              <ComputePathToPose goal="{goal}" path="{path}" planner_id="GridBased"/>
+            </DistanceController>
+          </RateController>
+          <FollowPath path="{path}" controller_id="FollowPath"/>
+        </PipelineSequence>
+        <ClearEntireCostmap name="clear_costmap" service_name="local_costmap/clear_entirely_local_costmap"/>
+      </RecoveryNode>
+    </Sequence>
+  </BehaviorTree>
+</root>

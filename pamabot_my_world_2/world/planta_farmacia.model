@@ -153,7 +153,7 @@
 
     <!-- Robot -->
     <include>
-      <uri>model://turtlebot3_burger_pi</uri>
+      <uri>model://turtlebot3_burger</uri>
       <pose>4.5 -8.0 0.01 0.0 0.0 0.0</pose>
     </include>
     

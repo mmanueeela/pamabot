@@ -17,10 +17,33 @@ def generate_launch_description():
     world_launch = os.path.join(pkg_world, 'launch', 'turtlebot3_my_world.launch.py')
     urdf_file = os.path.join(pkg_world, 'urdf', 'turtlebot3_burger.urdf')
 
+    with open(urdf_file, 'r') as infp:
+        robot_desc = infp.read()
+
     return LaunchDescription([
         # Gazebo
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(world_launch)
+        ),
+
+        # robot_state_publisher (con robot_description)
+        Node(
+            package='robot_state_publisher',
+            executable='robot_state_publisher',
+            name='robot_state_publisher',
+            output='screen',
+            parameters=[
+                {'use_sim_time': True},
+                {'robot_description': robot_desc}
+            ]
+        ),
+
+        # Spawn the robot in Gazebo
+        Node(
+            package='gazebo_ros',
+            executable='spawn_entity.py',
+            arguments=['-entity', 'turtlebot3_burger', '-topic', 'robot_description'],
+            output='screen'
         ),
 
         # Nodos de Nav2
@@ -39,16 +62,6 @@ def generate_launch_description():
             output='screen',
             parameters=[nav2_yaml]
         ),
-
-        Node(
-            package='robot_state_publisher',
-            executable='robot_state_publisher',
-            name='robot_state_publisher',
-            output='screen',
-            parameters=[{'use_sim_time': True}],
-            arguments=[urdf_file]
-        ),
-
 
         Node(
             package='nav2_planner',
@@ -82,8 +95,26 @@ def generate_launch_description():
             parameters=[nav2_yaml, {'use_sim_time': True}]
         ),
 
+        # Waypoint Follower ❤️
+        Node(
+            package='nav2_waypoint_follower',
+            executable='waypoint_follower',
+            name='waypoint_follower',
+            output='screen',
+            parameters=[{
+                'use_sim_time': True,
+                'loop_rate': 20,
+                'stop_on_failure': False,
+                'waypoint_task_executor_plugin': 'wait_at_waypoint',
+                'wait_at_waypoint': {
+                    'plugin': 'nav2_waypoint_follower::WaitAtWaypoint',
+                    'enabled': True,
+                    'waypoint_pause_duration': 0
+                }
+            }]
+        ),
 
-        # Lifecycle manager  🧬
+        # Lifecycle manager incluyendo waypoint_follower 🧬
         Node(
             package='nav2_lifecycle_manager',
             executable='lifecycle_manager',
@@ -98,12 +129,13 @@ def generate_launch_description():
                     'planner_server', 
                     'controller_server', 
                     'recoveries_server', 
-                    'bt_navigator'
+                    'bt_navigator',
+                    'waypoint_follower'
                 ]}
             ]
         ),
 
-        # RViz2 activado 💻
+        # RViz2 activado 💻 (descomenta si quieres usarlo)
         # Node(
         #     package='rviz2',
         #     executable='rviz2',
@@ -112,5 +144,4 @@ def generate_launch_description():
         #     parameters=[{'use_sim_time': True}],
         #     output='screen'
         # ),
-
     ])

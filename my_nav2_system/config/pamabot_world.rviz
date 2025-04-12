@@ -7,10 +7,11 @@ Panels:
         - /Global Options1
         - /Status1
         - /RobotModel1
-        - /RobotModel1/Status1
         - /Map1
+        - /Image1
+        - /Image1/Topic1
       Splitter Ratio: 0.5
-    Tree Height: 694
+    Tree Height: 495
   - Class: rviz_common/Selection
     Name: Selection
   - Class: rviz_common/Tool Properties
@@ -153,8 +154,6 @@ Visualization Manager:
           Value: true
         imu_link:
           Value: true
-        map:
-          Value: true
         odom:
           Value: true
         wheel_left_link:
@@ -167,20 +166,7 @@ Visualization Manager:
       Show Axes: true
       Show Names: false
       Tree:
-        map:
-          odom:
-            base_footprint:
-              base_link:
-                base_scan:
-                  {}
-                caster_back_link:
-                  {}
-                imu_link:
-                  {}
-                wheel_left_link:
-                  {}
-                wheel_right_link:
-                  {}
+        {}
       Update Interval: 0
       Value: true
     - Alpha: 0.699999988079071
@@ -203,6 +189,20 @@ Visualization Manager:
         Reliability Policy: Reliable
         Value: /map_updates
       Use Timestamp: false
+      Value: true
+    - Class: rviz_default_plugins/Image
+      Enabled: true
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: Image
+      Normalize Range: true
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Best Effort
+        Value: /camera/image_raw
       Value: true
   Enabled: true
   Global Options:
@@ -244,7 +244,9 @@ Window Geometry:
   Height: 845
   Hide Left Dock: false
   Hide Right Dock: false
-  QMainWindow State: 000000ff00000000fd0000000100000000000002eb000002f3fc0200000005fb000000100044006900730070006c006100790073010000003d000002f3000000c900fffffffb0000001200530065006c0065006300740069006f006e00000001f7000000d30000005c00fffffffb0000001e0054006f006f006c002000500072006f0070006500720074006900650073000000023c000000a40000005c00fffffffb0000000a00560069006500770073000000024a000000a7000000a400fffffffb0000000800540069006d006500000002a9000000870000003900ffffff00000392000002f300000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  Image:
+    collapsed: false
+  QMainWindow State: 000000ff00000000fd0000000100000000000002eb000002f3fc0200000006fb000000100044006900730070006c006100790073010000003d0000022c000000c900fffffffb0000001200530065006c0065006300740069006f006e00000001f7000000d30000005c00fffffffb0000001e0054006f006f006c002000500072006f0070006500720074006900650073000000023c000000a40000005c00fffffffb0000000a00560069006500770073000000024a000000a7000000a400fffffffb0000000800540069006d006500000002a9000000870000003900fffffffb0000000a0049006d006100670065010000026f000000c10000002800ffffff00000447000002f300000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Time:
@@ -253,6 +255,6 @@ Window Geometry:
     collapsed: false
   Views:
     collapsed: false
-  Width: 1667
+  Width: 1848
   X: 72
   Y: 27
