@@ -53,7 +53,7 @@ bt_navigator:
     global_frame: map
     robot_base_frame: base_link
     odom_topic: /odom
-    bt_xml_filename: "behavior_trees/simple_nav.xml"
+    bt_xml_filename: "/home/mmanueeelaadmin/turtlebot3_ws/src/pamabot/my_nav2_system/behavior_trees/simple_nav.xml"
     plugin_lib_names:
       - nav2_compute_path_to_pose_action_bt_node
       - nav2_follow_path_action_bt_node
@@ -228,3 +228,9 @@ lifecycle_manager:
     node_names:
       - map_server
       - amcl
+      - bt_navigator
+      - controller_server
+      - planner_server
+      - recoveries_server
+      - waypoint_follower
+
