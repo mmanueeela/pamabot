@@ -49,6 +49,7 @@ El sistema también incluye una **página web** que permite controlar el movimie
 
 # 🧑‍💻 Autor
 Desarrollado por [Manuela Zazzaro, Mari Dapcheva, Pablo Meana, Tan Qianzi]
+
 📧 Contacto: manussupv@gmail.com
 
 
