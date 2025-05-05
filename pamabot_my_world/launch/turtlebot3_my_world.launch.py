@@ -9,7 +9,25 @@ from launch_ros.actions import Node
 
 TURTLEBOT3_MODEL = os.environ.get('TURTLEBOT3_MODEL', 'burger')  # fallback
 
+"""
+Lanzador del mundo de Gazebo y del robot con su URDF personalizado.
+
+Este archivo lanza:
+- El servidor y cliente de Gazebo con un mundo personalizado.
+- El nodo `robot_state_publisher` con el modelo URDF correspondiente al TURTLEBOT3_MODEL.
+"""
+
 def generate_launch_description():
+    """
+    Genera y retorna una descripción de lanzamiento que configura:
+
+    - Argumento para usar tiempo simulado.
+    - Gazebo (servidor y cliente) con un mundo personalizado.
+    - Publicación del estado del robot a partir del URDF cargado desde archivo.
+
+    :return: LaunchDescription con los elementos del entorno de simulación.
+    """
+
     # Paths
     pkg_name = 'pamabot_my_world'
     pkg_share = get_package_share_directory(pkg_name)
