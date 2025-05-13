@@ -1,6 +1,6 @@
 from setuptools import setup
 
-package_name = 'queue_detector'
+package_name = 'pamabot_queue_detector'
 
 setup(
     name=package_name,
@@ -20,8 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
     'console_scripts': [
-        'queue_detector= queue_detector.queue_detector_node:main',
-        'queue_navigation = queue_detector.queue_navigation_node:main',
-    ],
-},
+    'queue_detector = pamabot_queue_detector.queue_detector_node:main',
+    'queue_navigation = pamabot_queue_detector.queue_navigation_node:main',
+    ]  
+  },
 )
