@@ -9,6 +9,10 @@
   <link rel="stylesheet" href="css/styles_admin.css">
   <link rel="stylesheet" href="css/styles_logout.css">
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/roslib@1/build/roslib.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/roslib/build/roslib.min.js"></script>
+ 
+
 </head>
 <body>
   <header>
@@ -34,6 +38,18 @@
               <p class="mt-2" id="estado">🔌 Sin conexión</p>
               <button class="mt-2 boton" id="btn_con">Conectar</button>
               <button class="mt-2 boton" id="btn_dis">Desconectar</button>
+              <hr>
+              <h5>Vista de cámara</h5>
+              <div id="divCamera" style="margin-top: 10px;">
+                <img id="cameraFeed" src="http://172.16.124.63:8080/stream?topic=/camera/image_raw" 
+                     style="width: 100%; height: auto; border-radius: 10px;" />
+              </div>
+              <hr>
+              <h5>Vista del mapa</h5>
+              <canvas id="mapCanvas" style="width: 100%; border: 1px solid white; border-radius: 10px;"></canvas>
+              
+              
+
             </div>
           </div>
         </div>
@@ -107,5 +123,7 @@
 
   <script src="js/script_admin.js"></script>
   <script src="js/script_singup_login_logout.js"></script>
+  <script src="js/draw_occupancy_grid.js"></script>
+ 
 </body>
 </html>
