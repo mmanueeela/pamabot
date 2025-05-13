@@ -523,3 +523,10 @@ main {
 #comprasPopup .popup-buttons .btn:hover {
     background-color: #d94c9a; /* Rosa más oscuro */
 }
+
+/* —— Habilitar scroll en la lista de notificaciones —— */
+.notificaciones-lista {
+    max-height: 300px; /* Ajusta según necesidad */
+    overflow-y: auto;
+    padding-right: 5px;
+  }

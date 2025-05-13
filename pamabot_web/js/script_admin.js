@@ -38,47 +38,95 @@ document.addEventListener('DOMContentLoaded', event => {
 
     function connect() {
         console.log("Clic en connect");
-
+    
         updateRosBridgeAddress();
-
+    
         data.ros = new ROSLIB.Ros({
             url: data.rosbridge_address
         });
-
+    
         data.ros.on("connection", () => {
             data.connected = true;
             document.getElementById("estado").textContent = '🔌 Conectado';
             document.getElementById("estado").style.color = 'green';
             console.log("Conexión con ROSBridge correcta");
-
-            // Suscribirse a /odom
+    
+            // 准备地图画布
+            const canvas = document.getElementById("mapCanvas");
+            const ctx = canvas.getContext("2d");
+            const image = new Image();
+            let mapInfo = null;
+            let robotPosition = { x: 0, y: 0 };
+    
+            // 处理图片加载成功
+            image.onload = () => {
+                console.log("✅ Imagen cargada correctamente");
+                canvas.width = image.width;
+                canvas.height = image.height;
+                ctx.drawImage(image, 0, 0);
+            };
+    
+            image.onerror = () => {
+                console.error("❌ Error al cargar la imagen:", image.src);
+            };
+    
+            // 加载 YAML 并设置图片路径
+            fetch("http://172.16.124.63:8000/static/farmaciaMapa.yaml")
+                .then(res => res.text())
+                .then(text => {
+                    mapInfo = jsyaml.load(text);
+                    console.log("🟡 YAML recibido:", mapInfo);
+                    image.src = "http://172.16.124.63:8000/static/" + mapInfo.image;
+                });
+    
+            // 订阅 /odom：更新位置 & 地图画图
             const odomTopic = new ROSLIB.Topic({
                 ros: data.ros,
                 name: '/odom',
                 messageType: 'nav_msgs/msg/Odometry'
             });
-
+    
             odomTopic.subscribe((message) => {
                 const position = message.pose.pose.position;
                 const orientation = message.pose.pose.orientation;
-
-                data.currentPosition.x = position.x;
-                data.currentPosition.y = position.y;
-                data.currentPosition.z = position.z;
-                data.currentPosition.w = orientation.w;
-
+    
+                data.currentPosition = {
+                    x: position.x,
+                    y: position.y,
+                    z: position.z,
+                    w: orientation.w
+                };
+    
                 document.getElementById("pos_x").textContent = position.x.toFixed(2);
                 document.getElementById("pos_y").textContent = position.y.toFixed(2);
-                document.getElementById("pos_w").textContent = orientation.w.toFixed(2); // CORRECTO: orientation.w
+                document.getElementById("pos_w").textContent = orientation.w.toFixed(2);
+    
+                if (!mapInfo || !image.complete) return;
+    
+                robotPosition.x = position.x;
+                robotPosition.y = position.y;
+    
+                const res = mapInfo.resolution;
+                const origin = mapInfo.origin;
+                const pixelX = (robotPosition.x - origin[0]) / res;
+                const pixelY = canvas.height - ((robotPosition.y - origin[1]) / res);
+    
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(image, 0, 0);
+    
+                ctx.beginPath();
+                ctx.fillStyle = "green";
+                ctx.arc(pixelX, pixelY, 5, 0, 2 * Math.PI);
+                ctx.fill();
             });
         });
-
+    
         data.ros.on("error", (error) => {
             console.error("Error de conexión:", error);
             document.getElementById("estado").textContent = '❌ Error de conexión';
             document.getElementById("estado").style.color = 'red';
         });
-
+    
         data.ros.on("close", () => {
             data.connected = false;
             document.getElementById("estado").textContent = '🔌 Desconectado';
@@ -86,6 +134,9 @@ document.addEventListener('DOMContentLoaded', event => {
             console.log("Conexión cerrada");
         });
     }
+    
+    
+    
 
     function disconnect() {
         if (data.ros) {
@@ -648,4 +699,15 @@ document.addEventListener('DOMContentLoaded', event => {
         // Iniciar primer paso: rotar
         rotateToTargetOrientation();
     } 
+
+
+    function updateCameraFeed() {
+        const img = document.getElementById("cameraFeed");
+        const timestamp = new Date().getTime(); // 避免缓存
+        img.src = `http://10.236.54.72:8080/stream?topic=/camera/image_raw&timestamp=${timestamp}`;
+      }
+      
+      // 每隔 2 秒刷新一次图像--Actualizar la imagen cada 2 segundos
+      setInterval(updateCameraFeed, 2000);
+      
 });
