@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -127,6 +126,15 @@
     <div class="popup-content-receta">
       <h3>Mi Receta Electrónica</h3>
       <hr>
+      <!-- Selector para días de recordatorio -->
+      <div class="form-group mb-3">
+        <label for="diasRecordatorio" class="form-label">Recordatorio de Vencimiento</label>
+        <select id="diasRecordatorio" class="form-control">
+          <option value="1">1 día antes</option>
+          <option value="3">3 días antes</option>
+          <option value="5">5 días antes</option>
+        </select>
+      </div>
       <table class="receta-tabla">
         <thead>
           <tr>
@@ -139,7 +147,7 @@
             <th>Indicaciones</th>
             <th>Duración</th>
             <th>Fecha Revisión</th>
-            <th>Acción</th>
+            <th>Estado</th>
           </tr>
         </thead>
         <tbody>
@@ -153,7 +161,7 @@
             <td>Desayuno, Comida, Acostar</td>
             <td>154 días</td>
             <td>13/06/25</td>
-            <td><button class="btn btn-sm btn-outline-warning editar-fecha-btn">Editar</button></td>
+            <td style="color: green;">Activo</td>
           </tr>
           <tr>
             <td>13/03/25</td>
@@ -165,7 +173,7 @@
             <td>Desayuno, Comida, Acostar</td>
             <td>90 días</td>
             <td>13/06/25</td>
-            <td><button class="btn btn-sm btn-outline-warning editar-fecha-btn">Editar</button></td>
+            <td style="color: red;">Caducado</td>
           </tr>
         </tbody>
       </table>
