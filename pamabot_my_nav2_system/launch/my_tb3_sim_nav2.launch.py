@@ -6,34 +6,13 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from ament_index_python.packages import get_package_share_directory
 from launch_ros.actions import Node
 
-"""
-Módulo de lanzamiento para el sistema de navegación Nav2 con retardo en el lifecycle manager.
-
-Este script lanza Gazebo, el stack de navegación Nav2, el publicador URDF, y RViz2.
-Introduce un retardo en la activación del lifecycle manager para asegurar que todos los nodos estén listos.
-"""
-
 def generate_launch_description():
-    """
-    Genera y retorna una descripción de lanzamiento para el sistema de navegación.
 
-    Incluye:
-    - Mundo en Gazebo.
-    - Servidor de mapas y localización AMCL.
-    - Nodos core de Nav2 (planner, controller, bt_navigator, recoveries).
-    - Publicador de estado del robot (robot_state_publisher).
-    - Lifecycle manager con retardo.
-    - Visualización en RViz2.
-
-    :return: LaunchDescription con todos los nodos y acciones.
-    """
-
-
-    pkg_nav2 = get_package_share_directory('my_nav2_system')
+    pkg_nav2 = get_package_share_directory('pamabot_my_nav2_system')
     pkg_world = get_package_share_directory('pamabot_my_world')
 
     nav2_yaml = os.path.join(pkg_nav2, 'config', 'my_nav2_params.yaml')
-    map_file = '/home/mmanueeelaadmin/turtlebot3_ws/src/pamabot/my_nav2_system/config/farmaciaMapa.yaml'
+    map_file = os.path.join(pkg_nav2, 'config', 'farmaciaMapa.yaml')
     rviz_config = os.path.join(pkg_nav2, 'config', 'pamabot_world.rviz')
     world_launch = os.path.join(pkg_world, 'launch', 'turtlebot3_my_world.launch.py')
     urdf_file = os.path.join(pkg_world, 'urdf', 'turtlebot3_burger_pi.urdf')
