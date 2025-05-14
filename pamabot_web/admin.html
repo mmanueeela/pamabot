@@ -9,6 +9,10 @@
   <link rel="stylesheet" href="css/styles_admin.css">
   <link rel="stylesheet" href="css/styles_logout.css">
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/roslib@1/build/roslib.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/roslib/build/roslib.min.js"></script>
+ 
+
 </head>
 <body>
   <header>
@@ -30,10 +34,24 @@
               <p class="text-center">Configuración de conexión</p>
               <hr>
               <label for="ipInput">Dirección del servidor:</label>
-              <input type="text" id="ipInput" class="form-control" value="ws://10.0.2.15:9090" />
+              <input type="text" id="ipInput" class="form-control" />
+
               <p class="mt-2" id="estado">🔌 Sin conexión</p>
               <button class="mt-2 boton" id="btn_con">Conectar</button>
               <button class="mt-2 boton" id="btn_dis">Desconectar</button>
+              <hr>
+              <h5>Vista de cámara</h5>
+              <div id="divCamera" style="margin-top: 10px;">
+                <img id="cameraFeed" src="" 
+                style="width: 100%; height: auto; border-radius: 10px;" />
+
+              </div>
+              <hr>
+              <h5>Vista del mapa</h5>
+              <canvas id="mapCanvas" style="width: 100%; border: 1px solid white; border-radius: 10px;"></canvas>
+              
+              
+
             </div>
           </div>
         </div>
@@ -53,14 +71,16 @@
               <h3 class="text-center">Controles WSAD</h3>
               <hr>
 
-              <!-- Contenedor con Flexbox para centrar los botones con espaciado uniforme -->
-              <div class="d-flex justify-content-center gap-5">
-                <button class="mt-2 boton" id="btn_delante">Delante</button>
-                <button class="mt-2 boton" id="btn_atras">Atrás</button>
-                <button class="mt-2 boton" id="btn_izquierda">Izquierda</button>
-                <button class="mt-2 boton" id="btn_derecha">Derecha</button>
-                <button class="mt-2 boton" id="btn_parar">Parar</button>
-              </div>
+              <!-- Controles WSAD -->
+<h2 class="titulo-seccion">Controles WSAD</h2>
+<div class="wsad">
+  <button class="mt-2 boton" id="btn_wsad_delante">Delante</button>
+  <button class="mt-2 boton" id="btn_wsad_atras">Atrás</button>
+  <button class="mt-2 boton" id="btn_wsad_izquierda">Izquierda</button>
+  <button class="mt-2 boton" id="btn_wsad_derecha">Derecha</button>
+  <button class="mt-2 boton" id="btn_wsad_parar">Parar</button>
+</div>
+
               <hr>
               <p>Coordenadas de la ubicación del robot</p>
               <p>
@@ -75,12 +95,11 @@
             <div class="card-body">
               <h3 class="text-center">Ubicaciones predeterminadas</h3>
               <div class="d-flex justify-content-center gap-3">
-                <button class="mt-3 boton" id="btn_move_casa_to_cola_clientes">Casa Cola</button>
-                <button class="mt-3 boton" id="btn_move_cola_to_almacen">Cola Almacen</button>
-                <button class="mt-3 boton" id="btn_move_almacen_to_cola">Almacen Cola</button>
-                <button class="mt-3 boton" id="btn_move_cola_to_casa">Cola Casa</button>
-                <button class="mt-3 boton" id="btn_move_casa_to_almacen">Casa Almacen</button>
-                <button class="mt-3 boton" id="btn_move_almacen_to_casa">Almacen Casa</button>
+                <button class="mt-3 boton" id="btn_goto_cola">Ir a Cola</button>
+                <button class="mt-3 boton" id="btn_goto_casa">Ir a Casa</button>
+                <button class="mt-3 boton" id="btn_goto_almacen">Ir a Almacén</button>
+                <button class="mt-3 boton" id="btn_cancelar_nav">Cancelar navegación</button>
+
               </div>
             </div>
           </div>
@@ -107,5 +126,7 @@
 
   <script src="js/script_admin.js"></script>
   <script src="js/script_singup_login_logout.js"></script>
+  <script src="js/draw_occupancy_grid.js"></script>
+ 
 </body>
 </html>

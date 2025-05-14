@@ -81,7 +81,7 @@
     <div class="popup-content">
       <h3>Últimas Notificaciones</h3>
       <ul id="notificacionesLista" class="notificaciones-lista">
-        <li>
+        <li class="fija">
           <span>Actualización de la receta electronica</span>
           <div class="popup-buttons">
             <button class="btn boton eliminar-notificacion">
@@ -92,7 +92,7 @@
             </button>
           </div>
         </li>
-        <li>
+        <li class="fija">
           <span>Ya tienes tus medicinas <br> en la tienda</span>
           <div class="popup-buttons">
             <button class="btn boton eliminar-notificacion">
@@ -103,7 +103,7 @@
             </button>
           </div>
         </li>
-        <li>
+        <li class="fija">
           <span>Compra realizada</span>
           <div class="popup-buttons">
             <button class="btn boton eliminar-notificacion">
@@ -126,6 +126,15 @@
     <div class="popup-content-receta">
       <h3>Mi Receta Electrónica</h3>
       <hr>
+      <!-- Selector para días de recordatorio -->
+      <div class="form-group mb-3">
+        <label for="diasRecordatorio" class="form-label">Recordatorio de Vencimiento</label>
+        <select id="diasRecordatorio" class="form-control">
+          <option value="1">1 día antes</option>
+          <option value="3">3 días antes</option>
+          <option value="5">5 días antes</option>
+        </select>
+      </div>
       <table class="receta-tabla">
         <thead>
           <tr>
@@ -138,6 +147,7 @@
             <th>Indicaciones</th>
             <th>Duración</th>
             <th>Fecha Revisión</th>
+            <th>Estado</th>
           </tr>
         </thead>
         <tbody>
@@ -151,6 +161,7 @@
             <td>Desayuno, Comida, Acostar</td>
             <td>154 días</td>
             <td>13/06/25</td>
+            <td style="color: green;">Activo</td>
           </tr>
           <tr>
             <td>13/03/25</td>
@@ -162,6 +173,7 @@
             <td>Desayuno, Comida, Acostar</td>
             <td>90 días</td>
             <td>13/06/25</td>
+            <td style="color: red;">Caducado</td>
           </tr>
         </tbody>
       </table>
@@ -224,18 +236,21 @@
             <td>01/04/25</td>
             <td>10.00€</td>
             <td><a href="tickets/ticket_003.pdf" class="btn btn-primary" download="ticket_003.pdf"><i class="bi bi-download"></i></a></td>
+            <td><button class="btn btn-sm btn-outline-warning editar-fecha-btn">Editar</button></td>
           </tr>
           <tr>
             <td>002</td>
             <td>15/03/25</td>
             <td>7.50€</td>
             <td><a href="tickets/ticket_002.pdf" class="btn btn-primary" download="ticket_002.pdf"><i class="bi bi-download"></i></a></td>
+            <td><button class="btn btn-sm btn-outline-warning editar-fecha-btn">Editar</button></td>
           </tr>
           <tr>
             <td>001</td>
             <td>10/03/25</td>
             <td>12.00€</td>
             <td><a href="tickets/ticket_001.pdf" class="btn btn-primary" download="ticket_001.pdf"><i class="bi bi-download"></i></a></td>
+            <td><button class="btn btn-sm btn-outline-warning editar-fecha-btn">Editar</button></td>
           </tr>
         </tbody>
       </table>

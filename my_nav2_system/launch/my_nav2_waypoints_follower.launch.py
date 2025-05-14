@@ -6,7 +6,29 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from ament_index_python.packages import get_package_share_directory
 from launch_ros.actions import Node
 
+"""
+Módulo de lanzamiento completo para el sistema de navegación Nav2 con Gazebo.
+
+Este script lanza:
+- El entorno de Gazebo con el robot.
+- Todos los nodos necesarios del stack de navegación (mapa, AMCL, planner, etc.).
+- El waypoint follower y lifecycle manager.
+- (Opcional) la visualización en RViz.
+"""
+
 def generate_launch_description():
+    """
+    Genera y retorna una descripción de lanzamiento que incluye:
+
+    - Gazebo con el mundo y robot cargado.
+    - Publicador de estado del robot (`robot_state_publisher`).
+    - Nodos del stack Nav2: mapa, localización, planificación, control, recuperación.
+    - Waypoint follower para navegación automática entre puntos.
+    - Lifecycle manager para iniciar todos los nodos.
+    - (Opcional) RViz con configuración personalizada.
+
+    :return: LaunchDescription con todos los nodos definidos.
+    """
 
     pkg_nav2 = get_package_share_directory('my_nav2_system')
     pkg_world = get_package_share_directory('pamabot_my_world')
@@ -114,7 +136,7 @@ def generate_launch_description():
             }]
         ),
 
-        # Lifecycle manager incluyendo waypoint_follower 🧬
+        # Lifecycle manager incluyendo waypoint_follower 
         Node(
             package='nav2_lifecycle_manager',
             executable='lifecycle_manager',
@@ -135,7 +157,7 @@ def generate_launch_description():
             ]
         ),
 
-        # RViz2 activado 💻 (descomenta si quieres usarlo)
+        # RViz2 activado (descomenta si quieres usarlo)
         # Node(
         #     package='rviz2',
         #     executable='rviz2',
