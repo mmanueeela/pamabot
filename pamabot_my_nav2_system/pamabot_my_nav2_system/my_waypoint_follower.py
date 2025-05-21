@@ -1,3 +1,5 @@
+# Copyright 2025 PAMABOT
+# License: Apache 2.0
 import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import PoseStamped

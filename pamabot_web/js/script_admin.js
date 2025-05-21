@@ -831,7 +831,19 @@ document.addEventListener('DOMContentLoaded', event => {
     document.getElementById("btn_wsad_derecha").addEventListener("click", () => moveRobot("derecha"));
     document.getElementById("btn_wsad_parar").addEventListener("click", stop);
     document.getElementById("btn_cancelar_nav").addEventListener("click", cancelNavigation);
+    // Listener para mostrar el SIP escaneado en el topic /codigo
+    const sipSpan = document.getElementById("sip-ultimo-cliente");
+    if (sipSpan && data.ros) {
+        const listenerCodigo = new ROSLIB.Topic({
+            ros: data.ros,
+            name: '/sip_codigo',
+            messageType: 'std_msgs/msg/String'
+        });
 
+        listenerCodigo.subscribe(function(message) {
+            sipSpan.textContent = message.data;
+        });
+    }
 
         
 });

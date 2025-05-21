@@ -1,3 +1,5 @@
+# Copyright 2025 PAMABOT
+# License: Apache 2.0
 # initial_pose_pub.py
 import sys
 import rclpy

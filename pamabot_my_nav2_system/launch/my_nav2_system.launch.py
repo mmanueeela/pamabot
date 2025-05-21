@@ -1,3 +1,5 @@
+# Copyright 2025 PAMABOT
+# License: Apache 2.0
 import os
 
 import launch.actions
