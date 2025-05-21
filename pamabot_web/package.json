@@ -1,0 +1,13 @@
+{
+  "name": "pamabot_web",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "jest",
+    "lint": "stylelint '**/*.css'"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0",
+    "jest-environment-jsdom": "^29.7.0"
+  }
+}

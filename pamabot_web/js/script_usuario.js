@@ -220,3 +220,8 @@ document.addEventListener("DOMContentLoaded", () => {
   actualizarPrimeraNotificacion();
   generarNotificacionesRecetas();
 });
+
+module.exports = {
+  moveRobot,
+  reverse,
+};

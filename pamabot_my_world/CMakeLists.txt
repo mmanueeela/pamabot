@@ -70,6 +70,32 @@ install(DIRECTORY include/
 )
 
 ################################################################################
+# Testing
+################################################################################
+if(BUILD_TESTING)
+  find_package(ament_lint_auto REQUIRED)
+  ament_lint_auto_find_test_dependencies()
+
+  find_package(ament_cmake_gtest REQUIRED)
+
+  ament_add_gtest(test_turtlebot3_drive
+    test/test_turtlebot3_drive.cpp
+    src/turtlebot3_drive.cpp
+  )
+  target_link_libraries(test_turtlebot3_drive
+    ${GAZEBO_LIBRARIES}
+  )
+  ament_target_dependencies(test_turtlebot3_drive
+    rclcpp
+    geometry_msgs
+    sensor_msgs
+    nav_msgs
+    tf2
+  )
+endif()
+
+
+################################################################################
 # Macro for ament package
 ################################################################################
 ament_export_include_directories(include)
@@ -80,3 +106,4 @@ ament_export_dependencies(rclcpp)
 ament_export_dependencies(sensor_msgs)
 ament_export_dependencies(tf2)
 ament_package()
+

@@ -1,3 +1,5 @@
+# Copyright 2025 PAMABOT
+# License: Apache 2.0
 from setuptools import setup
 import os
 from glob import glob
