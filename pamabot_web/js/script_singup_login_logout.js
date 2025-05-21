@@ -73,6 +73,10 @@ document.addEventListener("DOMContentLoaded", () => {
         errorMessage.style.display = "none";
         alert("Inicio de sesión exitoso ✅");
         window.location.href = "usuario.html";
+      }else if (username === "empleado" && password === "1234") {
+        errorMessage.style.display = "none";
+        alert("Inicio de sesión exitoso ✅");
+        window.location.href = "empleado.html";
       } else {
         errorMessage.textContent = "Usuario o contraseña incorrectos";
         errorMessage.style.display = "block";
