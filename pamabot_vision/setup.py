@@ -22,6 +22,7 @@ setup(
         'console_scripts': [
             'barcode_reader = pamabot_vision.barcode_reader:main',
             'imagen_pub = pamabot_vision.publicador_imagen:main',
+            'sip_reader = pamabot_vision.sip_reader:main',
         ],
     },
 )
