@@ -2,16 +2,13 @@ let localIp = location.hostname;
 
 let moveIntervalId = null;
 
-
 let data = {
     ros: null,
-    rosbridge_address: `ws://${localIp}:9090`,
+    rosbridge_address: `ws://192.168.0.136:9090`,
     connected: false,
     reverse: false,
     currentPosition: { x: 0, y: 0, z: 0, w: 1 }
 };
-
-
 
 function cancelNavigation() {
     if (moveIntervalId) {
@@ -22,7 +19,6 @@ function cancelNavigation() {
     stop();
 }
 
-
 function sendNavGoal(x, y, w = 1.0) {
     if (!data.connected) {
         console.warn("No conectado");
@@ -31,7 +27,7 @@ function sendNavGoal(x, y, w = 1.0) {
 
     const goalPublisher = new ROSLIB.Topic({
         ros: data.ros,
-        name: '/goal_pose',
+        name: '/navigate_to_pose', // Tópico de navegación en ROS 2
         messageType: 'geometry_msgs/msg/PoseStamped'
     });
 
@@ -54,10 +50,9 @@ function sendNavGoal(x, y, w = 1.0) {
         }
     });
 
-    console.log("🔵 Enviando objetivo a /goal_pose:", goal);
+    console.log("🔵 Enviando objetivo a /navigate_to_pose:", goal);
     goalPublisher.publish(goal);
 }
-
 
 function updateRosBridgeAddress() {
     const ipInput = document.getElementById("ipInput");
@@ -65,7 +60,6 @@ function updateRosBridgeAddress() {
         data.rosbridge_address = ipInput.value || data.rosbridge_address;
     }
 }
-
 
 // xin jian de dao hang dai ma
 function navigateTo(targetX, targetY, targetOrientationW = 1.0) {
@@ -121,7 +115,6 @@ function navigateTo(targetX, targetY, targetOrientationW = 1.0) {
 
     rotateToTargetOrientation();
 }
-
 
 function connect() {
     console.log("Clic en connect");
@@ -223,9 +216,6 @@ function connect() {
         console.log("Conexión cerrada");
     });
 }
-
-
-
 
 function disconnect() {
     if (data.ros) {
@@ -703,8 +693,6 @@ function moveAlmacenToColaClientes() {
     // Iniciar primer paso: rotar
     rotateToTargetOrientation();
 
-
-
 }
 function moveAlmacenToCasa() {
     if (!data.connected) {
@@ -784,7 +772,6 @@ function moveAlmacenToCasa() {
     rotateToTargetOrientation();
 } 
 
-
 function updateCameraFeed() {
     const img = document.getElementById("cameraFeed");
     const timestamp = new Date().getTime(); // 避免缓存
@@ -800,8 +787,6 @@ document.addEventListener('DOMContentLoaded', event => {
     // 自动根据页面地址设置 IP
     document.getElementById("ipInput").value = `ws://${localIp}:9090`;
     document.getElementById("cameraFeed").src = `http://${localIp}:8080/stream?topic=/camera/image_raw`;
-
-
 
     document.getElementById("btn_goto_cola").addEventListener("click", () => {
         sendNavGoal(3.998915, 4.900286, 1.0);
@@ -822,7 +807,6 @@ document.addEventListener('DOMContentLoaded', event => {
     document.getElementById("btn_move").addEventListener("click", move);
     document.getElementById("btn_stop").addEventListener("click", stop);
     document.getElementById("btn_reverse").addEventListener("click", reverse);
-
 
     // Botones de movimiento
     document.getElementById("btn_wsad_delante").addEventListener("click", () => moveRobot("delante"));
