@@ -1,0 +1,7 @@
+path: /home/mmanueeelaadmin/turtlebot3_ws/src/pamabot/pamabot_yolo_dataset
+
+train: images/train
+val: images/val
+
+nc: 2
+names: ['aguaoxigenada', 'alcohol']
