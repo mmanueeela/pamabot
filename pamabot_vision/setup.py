@@ -8,6 +8,7 @@ setup(
     version='0.0.0',
     packages=find_packages(include=['pamabot_vision', 'pamabot_vision.*']),
     data_files=[
+        ('share/ament_index/resource_index/packages', ['resource/' + package_name]),  # <-- Añadido
         ('share/' + package_name, ['package.xml']),
         (os.path.join('share', package_name, 'images'), ['images/mi_codigo.png']),
     ],
