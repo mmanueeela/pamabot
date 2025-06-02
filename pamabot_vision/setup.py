@@ -1,12 +1,12 @@
 import os
-from setuptools import setup
+from setuptools import setup, find_packages
 
 package_name = 'pamabot_vision'
 
 setup(
     name=package_name,
     version='0.0.0',
-    packages=[package_name],
+    packages=find_packages(include=['pamabot_vision', 'pamabot_vision.*']),
     data_files=[
         ('share/' + package_name, ['package.xml']),
         (os.path.join('share', package_name, 'images'), ['images/mi_codigo.png']),
