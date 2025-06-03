@@ -58,6 +58,10 @@
 
 ---
 
+## 👩‍💻 Autor
+Proyecto de Robotica 2025 de GTI.
+Desarrollado por Manuela Zazzaro, Mari Dapcheva, Pablo Meana y Tan Qianzi. 
+
 ## 🚀 Instalación
 
 ```bash
@@ -73,9 +77,3 @@ colcon build
 
 # Fuente del entorno
 source install/setup.bash
-
----
-
-## 🚀 Autor
-Proyecto de Robotica 2025 de GTI.
-Desarrollado por Manuela Zazzaro, Mari Dapcheva, Pablo Meana y Tan Qianzi. 
