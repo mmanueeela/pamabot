@@ -15,7 +15,8 @@ class ImagenPublisher(Node):
 
         # ✅ Obtener ruta desde el paquete instalado
         pkg_path = get_package_share_directory('pamabot_vision')
-        ruta = os.path.join(pkg_path, 'images', 'mi_codigo.png')
+        ruta = os.path.join(pkg_path, 'images', 'ultima_imagen.jpg') #variable para cambiar
+
 
         if not os.path.exists(ruta):
             self.get_logger().error(f"❌ Imagen no encontrada en: {ruta}")
