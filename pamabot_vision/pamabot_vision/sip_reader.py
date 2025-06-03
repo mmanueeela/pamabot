@@ -14,7 +14,7 @@ class SIPReader(Node):
         self.bridge = CvBridge()
         self.subscription = self.create_subscription(
             Image,
-            '/camera/image_raw',
+            '/image',
             self.image_callback,
             10
         )
