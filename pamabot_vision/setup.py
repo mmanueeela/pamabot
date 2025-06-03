@@ -25,6 +25,8 @@ setup(
             'imagen_pub = pamabot_vision.publicador_imagen:main',
             'sip_reader = pamabot_vision.sip_reader:main',
             'yolo_detector = pamabot_vision.nodes.yolo_detector_node:main',
+            'guardar_imagen_robot = pamabot_vision.guardar_imagen_robot:main'
+
         ],
     },
 )
