@@ -2,22 +2,46 @@ let localIp = location.hostname;
 
 let moveIntervalId = null;
 
+
 let data = {
     ros: null,
-    rosbridge_address: `ws://192.168.0.136:9090`,
+    rosbridge_address: `ws://${localIp}:9090`,
     connected: false,
     reverse: false,
     currentPosition: { x: 0, y: 0, z: 0, w: 1 }
 };
 
+
+
 function cancelNavigation() {
     if (moveIntervalId) {
         clearInterval(moveIntervalId);
         moveIntervalId = null;
-        console.log("Navegación cancelada manualmente");
+        console.log(" Movimiento manual cancelado");
     }
+
+    
     stop();
+
+    
+    const x = parseFloat(document.getElementById("pos_x").innerText);
+    const y = parseFloat(document.getElementById("pos_y").innerText);
+    const w = parseFloat(document.getElementById("pos_w").innerText);
+
+    if (!isNaN(x) && !isNaN(y) && !isNaN(w)) {
+        
+        sendNavGoal(x, y, w);
+        console.log(` Navegación cancelada reenviando objetivo a (${x.toFixed(2)}, ${y.toFixed(2)}, ${w.toFixed(2)})`);
+    } else {
+        console.warn(" Coordenadas actuales inválidas, no se puede cancelar la navegación.");
+    }
 }
+
+
+
+
+
+let navGoalClient = null;
 
 function sendNavGoal(x, y, w = 1.0) {
     if (!data.connected) {
@@ -27,7 +51,7 @@ function sendNavGoal(x, y, w = 1.0) {
 
     const goalPublisher = new ROSLIB.Topic({
         ros: data.ros,
-        name: '/navigate_to_pose', // Tópico de navegación en ROS 2
+        name: '/goal_pose',
         messageType: 'geometry_msgs/msg/PoseStamped'
     });
 
@@ -50,9 +74,11 @@ function sendNavGoal(x, y, w = 1.0) {
         }
     });
 
-    console.log("🔵 Enviando objetivo a /navigate_to_pose:", goal);
+    console.log("🔵 Enviando objetivo a /goal_pose:", goal);
     goalPublisher.publish(goal);
 }
+
+
 
 function updateRosBridgeAddress() {
     const ipInput = document.getElementById("ipInput");
@@ -61,7 +87,8 @@ function updateRosBridgeAddress() {
     }
 }
 
-// xin jian de dao hang dai ma
+
+// Código de navegación
 function navigateTo(targetX, targetY, targetOrientationW = 1.0) {
     if (!data.connected) {
         console.warn("No conectado");
@@ -115,6 +142,7 @@ function navigateTo(targetX, targetY, targetOrientationW = 1.0) {
 
     rotateToTargetOrientation();
 }
+
 
 function connect() {
     console.log("Clic en connect");
@@ -201,6 +229,26 @@ function connect() {
             ctx.arc(pixelX, pixelY, 5, 0, 2 * Math.PI);
             ctx.fill();
         });
+
+
+        const temperaturaSpan = document.getElementById("temperatura");
+    if (temperaturaSpan) {
+        const tempTopic = new ROSLIB.Topic({
+            ros: data.ros,
+            name: '/temperature',
+            messageType: 'sensor_msgs/msg/Temperature'
+        });
+
+        tempTopic.subscribe(function (message) {
+            console.log("收到温度数据：", message.temperature);
+            temperaturaSpan.textContent = `🌡 Temperatura: ${message.temperature.toFixed(1)} °C`;
+        });
+    } else {
+        console.warn("⚠️ 没找到 temperatura 元素");
+    }
+
+
+        
     });
 
     data.ros.on("error", (error) => {
@@ -216,6 +264,9 @@ function connect() {
         console.log("Conexión cerrada");
     });
 }
+
+
+
 
 function disconnect() {
     if (data.ros) {
@@ -531,7 +582,7 @@ function moveColaClientesToAlmacen() {
                 console.log("Destino alcanzado. Deteniendo robot...");
                 clearInterval(moveIntervalId);
                 moveIntervalId = null;
-                moveCasaToAlmacen();  // 注意：这是你原来加的，保留它
+                moveCasaToAlmacen();  
                 stop();
             }
         }, 1000);
@@ -685,13 +736,15 @@ function moveAlmacenToColaClientes() {
                 console.log("Destino alcanzado. Deteniendo robot...");
                 clearInterval(moveIntervalId);
                 moveIntervalId = null;
-                moveCasaToColaClientes();  // 保留你原来的调用
+                moveCasaToColaClientes();  
                 stop();
             }
         }, 1000);
     }
     // Iniciar primer paso: rotar
     rotateToTargetOrientation();
+
+
 
 }
 function moveAlmacenToCasa() {
@@ -772,21 +825,26 @@ function moveAlmacenToCasa() {
     rotateToTargetOrientation();
 } 
 
+
 function updateCameraFeed() {
     const img = document.getElementById("cameraFeed");
-    const timestamp = new Date().getTime(); // 避免缓存
-    img.src = `http://${localIp}:8080/stream?topic=/camera/image_raw&timestamp=${timestamp}`;
-
+    const timestamp = new Date().getTime(); // Evitar el almacenamiento en caché
+    img.src = `http://${localIp}:8080/stream?topic=/image&timestamp=${timestamp}`;
   }
+  
   
   // 每隔 2 秒刷新一次图像--Actualizar la imagen cada 2 segundos
   setInterval(updateCameraFeed, 2000);
 
 document.addEventListener('DOMContentLoaded', event => {
     
-    // 自动根据页面地址设置 IP
+    // 自动根据页面地址设置 IP     Establecer IP automáticamente según la dirección de la página
     document.getElementById("ipInput").value = `ws://${localIp}:9090`;
-    document.getElementById("cameraFeed").src = `http://${localIp}:8080/stream?topic=/camera/image_raw`;
+    const timestamp = new Date().getTime(); 
+    document.getElementById("cameraFeed").src = `http://${localIp}:8080/stream?topic=/image&timestamp=${timestamp}`;
+    
+
+
 
     document.getElementById("btn_goto_cola").addEventListener("click", () => {
         sendNavGoal(3.998915, 4.900286, 1.0);
@@ -808,6 +866,7 @@ document.addEventListener('DOMContentLoaded', event => {
     document.getElementById("btn_stop").addEventListener("click", stop);
     document.getElementById("btn_reverse").addEventListener("click", reverse);
 
+
     // Botones de movimiento
     document.getElementById("btn_wsad_delante").addEventListener("click", () => moveRobot("delante"));
     document.getElementById("btn_wsad_atras").addEventListener("click", () => moveRobot("atras"));
@@ -815,19 +874,92 @@ document.addEventListener('DOMContentLoaded', event => {
     document.getElementById("btn_wsad_derecha").addEventListener("click", () => moveRobot("derecha"));
     document.getElementById("btn_wsad_parar").addEventListener("click", stop);
     document.getElementById("btn_cancelar_nav").addEventListener("click", cancelNavigation);
-    // Listener para mostrar el SIP escaneado en el topic /codigo
-    const sipSpan = document.getElementById("sip-ultimo-cliente");
-    if (sipSpan && data.ros) {
-        const listenerCodigo = new ROSLIB.Topic({
+
+    //  Suscribirse al topic /ultimo_sip para actualizar el SIP del último cliente
+    if (data.ros) {
+        const ultimoSipTopic = new ROSLIB.Topic({
             ros: data.ros,
-            name: '/sip_codigo',
+            name: '/ultimo_sip',
             messageType: 'std_msgs/msg/String'
         });
 
-        listenerCodigo.subscribe(function(message) {
-            sipSpan.textContent = message.data;
+        ultimoSipTopic.subscribe(function(message) {
+            const sipSpan = document.getElementById("sip-ultimo-cliente");
+            if (sipSpan) {
+                sipSpan.textContent = message.data;
+            }
         });
     }
-
         
 });
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const btnGuardar = document.getElementById("btn_guardar_imagen");
+    const cameraFeed = document.getElementById("cameraFeed");
+    const sipSpan = document.getElementById("sip-ultimo-cliente");
+
+    console.log("✅ Página cargada, preparando botón de Escanear SIP");
+
+    if (!btnGuardar) {
+        console.error("❌ No se encontró el botón btn_guardar_imagen");
+        return;
+    }
+
+    if (!cameraFeed) {
+        console.error("❌ No se encontró el elemento cameraFeed");
+        return;
+    }
+
+    // Al hacer clic en el botón, capturamos la imagen desde canvas
+    btnGuardar.addEventListener("click", function () {
+        console.log("📸 Botón pulsado para capturar imagen");
+
+        // Crear canvas temporal
+        const canvas = document.createElement("canvas");
+        canvas.width = cameraFeed.videoWidth || cameraFeed.naturalWidth;
+        canvas.height = cameraFeed.videoHeight || cameraFeed.naturalHeight;
+
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(cameraFeed, 0, 0, canvas.width, canvas.height);
+
+        // Convertir a blob y descargar
+        canvas.toBlob(function (blob) {
+            if (blob) {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = "robot_camera.jpg";
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                console.log("✅ Imagen descargada correctamente");
+            } else {
+                alert("⚠️ No se pudo capturar la imagen.");
+            }
+        }, "image/jpeg");
+    });
+
+    // Suscripción al topic /ultimo_sip (si es necesario)
+    if (typeof data !== 'undefined' && data.ros) {
+        const ultimoSipTopic = new ROSLIB.Topic({
+            ros: data.ros,
+            name: '/ultimo_sip',
+            messageType: 'std_msgs/msg/String'
+        });
+
+        ultimoSipTopic.subscribe(function (message) {
+            if (sipSpan) {
+                sipSpan.textContent = message.data;
+                console.log("🟢 Recibido desde /ultimo_sip: " + message.data);
+            }
+        });
+    }
+});
+
+
+
+
+
+

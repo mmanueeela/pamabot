@@ -108,6 +108,8 @@
           <button class="btn menu-btn" data-bs-toggle="modal" data-bs-target="#modificarProducto">MODIFICAR STOCK PRODUCTO</button>
           <button class="btn menu-btn" data-bs-target="#modificarInfoPopup">MODIFICAR PRODUCTO</button>
           <button class="btn menu-btn" data-bs-target="#registroVentasPopup" id="botonRegistroVentas">REGISTRO DE VENTAS</button>
+          <button class="btn menu-btn" data-bs-target="#popupRecetasCliente" id="botonRecetasCliente">RECETAS POR CLIENTE</button>
+          <button class="btn menu-btn" id="botonEntregaMedicamento" type="button">ENTREGA MEDICAMENTO</button>
       </div>
     
   </main>
@@ -304,9 +306,75 @@
     </div>
   </div>
 
+  <!-- Popup para mostrar recetas por cliente -->
+  <div id="popupRecetasCliente" class="popup-overlay" style="display: none;">
+  <div class="popup-content recetas">
+      <h3>Recetas del Cliente</h3>
+      <form id="formBuscarRecetas" style="margin-bottom: 1em;">
+        <label for="inputSipRecetas">Introduce SIP del cliente:</label>
+        <input id="inputSipRecetas" class="form-control" placeholder="SIP" required />
+        <button type="submit" class="btn btn-success boton" style="margin-top: 0.5em;">Buscar</button>
+      </form>
+      <div class="tabla-scroll">
+        <table class="stock-tabla">
+          <thead>
+            <tr>
+              <th>Denominación</th>
+              <th>Código</th>
+              <th>Cantidad</th>
+              <th>Stock</th>
+            </tr>
+          </thead>
+          <tbody id="tablaRecetasClienteBody">
+            <!-- Recetas se mostrarán aquí -->
+          </tbody>
+        </table>
+      </div>
+      <div class="popup-buttons">
+        <button type="button" id="cerrarPopupRecetasCliente" class="btn boton">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popup para entrega de medicamento -->
+  <div id="popupEntregaMedicamento" class="popup-overlay" style="display: none;">
+    <div class="popup-content recetas" style="align-items:center;">
+      <h3>Entrega de Medicamento</h3>
+      <div class="entrega-flex">
+        <img id="imagenMedicamentoDetectado" src="images/detectada.jpg" alt="Medicamento Detectado">
+        <p id="textoEntregaMedicamento">
+          SIP del cliente: <span id="nombreClienteEntrega">625932402</span>
+        </p>
+      </div>
+      <div class="popup-buttons">
+        <button type="button" id="cerrarPopupEntregaMedicamento" class="btn boton">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
   <script src="js/script_singup_login_logout.js"></script>
   <script src="js/script_empleado.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
+  <script>
+// Botón y popup de entrega de medicamento
+document.addEventListener("DOMContentLoaded", function() {
+  const btnEntrega = document.getElementById("botonEntregaMedicamento");
+  const popupEntrega = document.getElementById("popupEntregaMedicamento");
+  const cerrarEntrega = document.getElementById("cerrarPopupEntregaMedicamento");
+  const imagenMedicamento = document.getElementById("imagenMedicamentoDetectado");
+  const nombreClienteEntrega = document.getElementById("nombreClienteEntrega");
+
+  if (btnEntrega && popupEntrega && cerrarEntrega) {
+    btnEntrega.addEventListener("click", function() {
+    
+      popupEntrega.style.display = "flex";
+    });
+    cerrarEntrega.addEventListener("click", function() {
+      popupEntrega.style.display = "none";
+    });
+  }
+});
+</script>
 </body>
 </html>

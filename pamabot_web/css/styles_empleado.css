@@ -121,6 +121,26 @@
     align-items: center;
 }
 
+/* Popup especial para recetas por cliente */
+.popup-content.recetas {
+    background-color: #1e2a78;
+    color: #222;
+    padding: 40px 20px 30px 20px;
+    border-radius: 20px;
+    width: 75vw;
+    max-width: 1400px;
+    max-height: 90vh;
+    box-shadow: 0 4px 32px rgba(0, 0, 0, 0.3);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.popup-content.recetas label {
+    color: #fff;
+}
+
 /* Scroll horizontal para tablas grandes dentro del popup */
 .tabla-scroll {
     width: 100%;
@@ -190,4 +210,60 @@
         flex-direction: column; /* Botones apilados verticalmente */
         gap: 10px;
     }
+}
+
+/* Estilo específico para el popup de entrega de medicamento */
+#popupEntregaMedicamento .popup-content {
+    align-items: center; /* Centra el contenido horizontalmente */
+}
+
+#popupEntregaMedicamento h3 {
+    margin: 0 0 1em 0; /* Margen inferior para separación */
+    font-size: 1.5em;
+    color: #fff;
+    text-align: center;
+}
+
+#popupEntregaMedicamento .popup-buttons {
+    margin-top: 1.5em;
+    display: flex;
+    justify-content: center; /* Centra el botón en el popup */
+}
+
+#popupEntregaMedicamento .btn {
+    background-color: #f54aa1;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#popupEntregaMedicamento .btn:hover {
+    background-color: #d43f8d;
+}
+
+/* Estilo para la imagen del medicamento detectado */
+#imagenMedicamentoDetectado {
+    max-width: 120px;
+    max-height: 120px;
+    border-radius: 10px;
+}
+
+/* Estilo para el texto de entrega de medicamento */
+#textoEntregaMedicamento {
+    font-size: 1.2em;
+    color: #fff;
+    margin: 0;
+    text-align: left;
+}
+
+/* Flex para imagen y texto en el popup de entrega */
+.entrega-flex {
+    display: flex;
+    align-items: center;
+    gap: 2em;
+    margin-top: 1em;
+    margin-bottom: 1em;
 }

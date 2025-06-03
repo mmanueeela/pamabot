@@ -263,7 +263,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const notificacionesPopup = document.getElementById("notificacionesPopup");
   const cerrarNotificacionesBtn = document.getElementById("cerrarNotificaciones");
+  // Botón y popup de entrega de medicamento
+  document.addEventListener("DOMContentLoaded", function() {
+    const btnEntrega = document.getElementById("botonEntregaMedicamento");
+    const popupEntrega = document.getElementById("popupEntregaMedicamento");
+    const cerrarEntrega = document.getElementById("cerrarPopupEntregaMedicamento");
+    const imagenMedicamento = document.getElementById("imagenMedicamentoDetectado");
+    const nombreClienteEntrega = document.getElementById("nombreClienteEntrega");
 
+    if (btnEntrega && popupEntrega && cerrarEntrega) {
+      btnEntrega.addEventListener("click", function() {
+        // Aquí puedes actualizar dinámicamente la imagen y el nombre si lo necesitas
+        // imagenMedicamento.src = "images/robot.png";
+        // nombreClienteEntrega.textContent = "625932402";
+        popupEntrega.style.display = "flex";
+      });
+      cerrarEntrega.addEventListener("click", function() {
+        popupEntrega.style.display = "none";
+      });
+    }
+  });
   // Abrir el popup de notificaciones
   document.querySelector('[data-bs-target="#notificacionesPopup"]').addEventListener("click", () => {
     notificacionesPopup.style.display = "flex";
@@ -319,5 +338,74 @@ document.addEventListener("DOMContentLoaded", () => {
 
   cerrarRegistroVentasBtn.addEventListener("click", () => {
     registroVentasPopup.style.display = "none";
+  });
+
+  // --- Recetas por cliente (sin API, datos simulados) ---
+  const popupRecetasCliente = document.getElementById("popupRecetasCliente");
+  const botonRecetasCliente = document.getElementById("botonRecetasCliente");
+  const cerrarPopupRecetasCliente = document.getElementById("cerrarPopupRecetasCliente");
+  const formBuscarRecetas = document.getElementById("formBuscarRecetas");
+  const tablaRecetasClienteBody = document.getElementById("tablaRecetasClienteBody");
+
+  // Recetas simuladas por SIP
+  const recetasPorSip = {
+    "625932402": [
+      { denominacion: "Esparadrapo", codigo: "008", cantidad: 2 },
+      { denominacion: "Paracetamol", codigo: "004", cantidad: 1 }
+    ],
+    "653399975": [
+      { denominacion: "Ibuprofeno", codigo: "002", cantidad: 1},
+      { denominacion: "Omeprazol", codigo: "005", cantidad: 1 }
+    ],
+    "654939633": [
+      { denominacion: "Amoxicilina", codigo: "003", cantidad: 1}
+    ]
+  };
+
+  // Abrir popup
+  botonRecetasCliente.addEventListener("click", () => {
+    popupRecetasCliente.style.display = "flex";
+    tablaRecetasClienteBody.innerHTML = "";
+  });
+
+  // Cerrar popup
+  cerrarPopupRecetasCliente.addEventListener("click", () => {
+    popupRecetasCliente.style.display = "none";
+  });
+
+  // Buscar recetas por SIP
+  formBuscarRecetas.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const sip = document.getElementById("inputSipRecetas").value.trim();
+    const recetas = recetasPorSip[sip] || [];
+    tablaRecetasClienteBody.innerHTML = "";
+
+    if (recetas.length === 0) {
+      tablaRecetasClienteBody.innerHTML = `<tr><td colspan="6">No hay recetas para este SIP.</td></tr>`;
+      return;
+    }
+
+    recetas.forEach(receta => {
+      // Buscar el producto en la tabla de stock
+      let stock = "NO";
+      Array.from(document.querySelectorAll(".stock-tabla tbody tr")).forEach(fila => {
+        const nombre = fila.cells[1].textContent.trim().toLowerCase();
+        if (nombre === receta.denominacion.trim().toLowerCase()) {
+          const cantidad = parseInt(fila.cells[3].textContent, 10);
+          if (cantidad > 0) stock = `<span style="color:green;font-weight:bold;">SÍ</span>`;
+          else stock = `<span style="color:red;font-weight:bold;">NO</span>`;
+        }
+      });
+      if (stock === "NO") stock = `<span style="color:red;font-weight:bold;">NO</span>`;
+
+      tablaRecetasClienteBody.innerHTML += `
+        <tr>
+          <td>${receta.denominacion}</td>
+          <td>${receta.codigo}</td>
+          <td>${receta.cantidad}</td>
+          <td>${stock}</td>
+        </tr>
+      `;
+    });
   });
 });

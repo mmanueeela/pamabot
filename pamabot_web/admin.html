@@ -44,7 +44,7 @@
               <div id="divCamera" style="margin-top: 10px;">
                 <img id="cameraFeed" src="" 
                 style="width: 100%; height: auto; border-radius: 10px;" />
-
+                <button id="btn_guardar_imagen" class="mt-2 boton" type="button">Escanear SIP</button>
               </div>
               <hr>
               <h5>Vista del mapa</h5>
@@ -52,7 +52,6 @@
               <hr>
               <h5>Ultimo cliente</h5>
               <span id="sip-ultimo-cliente" style="font-weight:bold; font-size:1.2em;">8705575136</span>
-
               
 
             </div>
@@ -92,6 +91,13 @@
                 <span>Coordenada Z: <span id="pos_z">0.00</span></span><br>
                 <span>Orientación: <span id="pos_w">0.00</span></span>
               </p>
+              <hr>
+              <h1>📡 Monitor del TurtleBot</h1>
+
+                <div class="metric">🔋 Batería: <span id="bateria">No disponible</span></div>
+                <div class="metric">🚶 Velocidad lineal: <span id="velocidad">Cargando...</span></div>
+                <div class="metric">🌡 Temperatura: <span id="temperatura">Cargando...</span></div>
+                <div class="metric">📅 Última actualización: <span id="timestamp">--</span></div>
             </div>
           </div>
           <div class="card">
@@ -127,6 +133,8 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/roslib/build/roslib.min.js"></script>
+  <script src="js/script_monitor.js"></script>
   <script src="js/script_admin.js"></script>
   <script src="js/script_singup_login_logout.js"></script>
   <script src="js/draw_occupancy_grid.js"></script>
