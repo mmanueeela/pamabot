@@ -28,6 +28,15 @@ class SIPReader(Node):
             self.get_logger().error(f"❌ Error al convertir la imagen: {e}")
             return
 
+        # Guardar la imagen como archivo PNG
+        try:
+            image_path = '/home/mmanueeelaadmin/turtlebot3_ws/src/pamabot/pamabot_vision/captured_image.png'
+            cv2.imwrite(image_path, frame)
+            self.get_logger().info(f"📸 Imagen capturada y guardada en: {image_path}")
+        except Exception as e:
+            self.get_logger().error(f"❌ Error al guardar la imagen: {e}")
+            return
+
         # Preprocesamiento para mejorar OCR
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         gray = cv2.GaussianBlur(gray, (3, 3), 0)
