@@ -408,4 +408,81 @@ document.addEventListener("DOMContentLoaded", () => {
       `;
     });
   });
+
+  
+  const notificacionesLista = document.getElementById("notificacionesLista");
+
+  // Función para generar notificación de batería baja
+  function generarNotificacionBateria(nivelBateria) {
+    const notificacionExistente = Array.from(notificacionesLista.children).find((notificacion) =>
+      notificacion.textContent.includes("Batería baja")
+    );
+
+    if (!notificacionExistente) {
+      const notificacion = document.createElement("li");
+      notificacion.classList.add("fija", "bateria-notificacion");
+      notificacion.innerHTML = `
+        <span>⚠️ Advertencia: La batería está baja (${nivelBateria}%).</span>
+        <div class="popup-buttons">
+          <button class="btn boton eliminar-notificacion">
+            <i class="bi bi-trash"></i> <!-- Icono de eliminar -->
+          </button>
+        </div>
+      `;
+
+      // Añadir la notificación a la lista
+      notificacionesLista.appendChild(notificacion);
+
+      // Agregar funcionalidad para eliminar la notificación
+      notificacion.querySelector(".eliminar-notificacion").addEventListener("click", () => {
+        notificacion.remove();
+        actualizarContadorNotificaciones(); // Actualizar el contador al eliminar
+      });
+
+      // Actualizar el contador de notificaciones
+      actualizarContadorNotificaciones();
+    }
+  }
+
+  // Función para actualizar el contador de notificaciones
+  function actualizarContadorNotificaciones() {
+    const botonNotificaciones = document.getElementById("botonNotificaciones");
+    const cantidadNotificaciones = notificacionesLista.children.length;
+    botonNotificaciones.textContent = `MIS NOTIFICACIONES (${cantidadNotificaciones})`;
+  }
+
+  // Simulación de suscripción al tópico de batería
+  function suscribirBateria() {
+    // Simula recibir datos del tópico de batería cada 5 segundos
+    setInterval(() => {
+      const nivelBateria = Math.floor(Math.random() * 100); // Simula un nivel de batería aleatorio
+      console.log(`Nivel de batería: ${nivelBateria}%`);
+
+      if (nivelBateria < 20) {
+        generarNotificacionBateria(nivelBateria);
+      }
+    }, 5000);
+  }
+
+  // Iniciar la suscripción al tópico de batería
+  suscribirBateria();
+
+  const ros = new ROSLIB.Ros({
+    url: 'ws://localhost:9090' // Cambia la URL según tu configuración
+  });
+
+  const batteryTopic = new ROSLIB.Topic({
+    ros: ros,
+    name: '/battery_status',
+    messageType: 'std_msgs/Float32' // Cambia el tipo de mensaje según tu tópico
+  });
+
+  batteryTopic.subscribe((message) => {
+    const nivelBateria = message.percentage; // Ajusta según el campo del mensaje
+    console.log(`Nivel de batería recibido: ${nivelBateria}%`);
+
+    if (nivelBateria < 20) {
+      generarNotificacionBateria(nivelBateria);
+    }
+  });
 });
